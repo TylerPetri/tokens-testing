@@ -37,7 +37,7 @@ router.post('/register', async (req, res, next) => {
           expiresIn: 86400,
         });
         res.json({
-          data,
+          ...data.$__,
           token,
         });
       }
@@ -65,17 +65,15 @@ router.post('/login', async (req, res, next) => {
     if (!user) {
       console.log({ error: `No user found for username: ${username}` });
       res.status(401).json({ error: 'Wrong username and/or password' });
-    } else if (!user.correctPassword(password)) {
+    } else if (user && user.password !== password) {
       console.log({ error: 'Wrong username and/or password' });
       res.status(401).json({ error: 'Wrong username and/or password' });
     } else {
-      const token = jwt.sign(
-        { id: user.dataValues.id },
-        process.env.SESSION_SECRET,
-        { expiresIn: 86400 }
-      );
+      const token = jwt.sign({ id: user._id }, process.env.SESSION_SECRET, {
+        expiresIn: 86400,
+      });
       res.json({
-        ...user.dataValues,
+        ...user.$__,
         token,
       });
     }

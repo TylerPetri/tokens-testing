@@ -18,19 +18,19 @@ const Home = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (user.id) {
+    if (user._id) {
       setIsLoggedIn(true);
     }
-  }, [user.id]);
+  }, [user]);
 
-  if (!user.id) {
+  if (!user._id) {
     // If we were previously logged in, redirect to login instead of register
     if (isLoggedIn) return <Redirect to='/login' />;
     return <Redirect to='/register' />;
   }
 
   const handleLogout = async () => {
-    await logout(user.id);
+    await logout(user._id);
   };
 
   return (
@@ -49,7 +49,6 @@ const Home = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    conversations: state.conversations,
   };
 };
 

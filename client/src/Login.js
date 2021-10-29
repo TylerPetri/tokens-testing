@@ -45,7 +45,7 @@ const Login = (props) => {
     await login({ username, password });
   };
 
-  if (user.id) {
+  if (user._id) {
     return <Redirect to='/home' />;
   }
 
