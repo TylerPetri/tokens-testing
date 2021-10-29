@@ -1,5 +1,6 @@
+const mongoose = require('mongoose');
 const router = require('express').Router();
-const User = require('../../models/user');
+const { User } = require('../../models/index');
 const jwt = require('jsonwebtoken');
 
 router.post('/register', async (req, res, next) => {
@@ -19,18 +20,27 @@ router.post('/register', async (req, res, next) => {
         .json({ error: 'Password must be at least 6 characters' });
     }
 
-    const user = await User.create(req.body);
-
-    console.log(user);
-
-    const token = jwt.sign(
-      { id: user.dataValues.id },
-      process.env.SESSION_SECRET,
-      { expiresIn: 86400 }
-    );
-    res.json({
-      ...user.dataValues,
-      token,
+    new User({
+      _id: mongoose.Types.ObjectId(),
+      username: username,
+      email: email,
+      password: password,
+    }).save((err, data) => {
+      if (err) {
+        console.error(
+          'Unable to add user. Error JSON:',
+          JSON.stringify(err, null, 2)
+        );
+        res.json({ message: 'Error has occurred' });
+      } else {
+        const token = jwt.sign({ id: data._id }, process.env.SESSION_SECRET, {
+          expiresIn: 86400,
+        });
+        res.json({
+          data,
+          token,
+        });
+      }
     });
   } catch (error) {
     if (error.name === 'MongooseUniqueError') {

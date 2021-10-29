@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  username: { type: String, unique: true, allowNull: false },
+  username: {
+    type: String,
+    unique: false,
+    allowNull: false,
+  },
   email: {
     type: String,
-    unique: true,
+    unique: false,
     allowNull: false,
     match:
       /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
