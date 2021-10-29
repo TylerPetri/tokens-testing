@@ -2,8 +2,19 @@ const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  username: String,
-  password: String,
+  username: { type: String, unique: true, allowNull: false },
+  email: {
+    type: String,
+    unique: true,
+    allowNull: false,
+    match:
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+  },
+  password: {
+    type: String,
+    min: [6, 'Must be at least 6, got {VALUE}'],
+    allowNull: false,
+  },
 });
 const User = mongoose.model('User', UserSchema);
 

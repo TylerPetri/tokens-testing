@@ -33,6 +33,7 @@ app.use(function (req, res, next) {
       });
     });
   } else {
+    console.log('hi');
     return next();
   }
 });

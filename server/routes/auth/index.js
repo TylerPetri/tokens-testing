@@ -21,6 +21,8 @@ router.post('/register', async (req, res, next) => {
 
     const user = await User.create(req.body);
 
+    console.log(user);
+
     const token = jwt.sign(
       { id: user.dataValues.id },
       process.env.SESSION_SECRET,
